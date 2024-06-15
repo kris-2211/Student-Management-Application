@@ -15,6 +15,16 @@ router.get('/student',async (req,res)=>{
     }
 });
 
+router.get('/student-get/:id',async(req,res)=>{
+    try{
+        const student=await Student.find({roll:req.params.id});
+        res.status(200).json(student);
+    }
+    catch(err){
+        res.status(500).send(err);
+    }
+});
+
 router.put('/student/:id',async(req,res)=>{
     const studentObj={
         roll:req.body.roll,
