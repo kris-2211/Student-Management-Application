@@ -17,7 +17,7 @@ export default function StudentList() {
     }
     
     function handleUpdate(id){
-        navigate('/update-student');
+        navigate(`/update-student/${id}`);
     }
     
     return (

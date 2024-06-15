@@ -1,19 +1,23 @@
 import React,{useEffect, useState} from 'react'
-import { updateStudent } from '../services/Studentservices';
-import { useNavigate } from 'react-router-dom';
+import { getStudent, updateStudent } from '../services/Studentservices';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 
 export default function UpdateStudent() {
-  const [formData, setFormData] = useState({
-    name: '',
-    age:'',
-    email: '',
-    phone: ''
-  });
-  // useEffect(async()=>{
-  //   const res=await 
-  // },[])
+  const [formData, setFormData] = useState({});
+  const { id }=useParams()
+  useEffect(()=>{
+    try{
+      const response= getStudent(id);
+      response.then((res)=>{
+        setFormData({...res.data[0]})
+      })
+    }
+    catch(err){
+      console.log("could not fetch data to update")
+    }
+  },[id])
 
 
   const [errors, setErrors] = useState({});
@@ -53,7 +57,7 @@ export default function UpdateStudent() {
     e.preventDefault();
     if (validate()) {
       try {
-        const response= await updateStudent(formData,id);
+        const response= await updateStudent(id,formData);
         console.log('Form data is valid and submitted:', response.data);
         navigate('/students')
       } catch (error) {
@@ -71,7 +75,8 @@ export default function UpdateStudent() {
           <input
             type="text"
             name="roll"
-            value={formData.roll}
+            disabled
+            value={formData.roll!=null?formData.roll:""}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
           />
@@ -82,7 +87,7 @@ export default function UpdateStudent() {
           <input
             type="text"
             name="name"
-            value={formData.name}
+            value={formData.name!=null?formData.name:""}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
           />
@@ -93,7 +98,7 @@ export default function UpdateStudent() {
           <input
             type="text"
             name="age"
-            value={formData.age}
+            value={formData.age!=null?formData.age:""}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
           />
@@ -105,7 +110,7 @@ export default function UpdateStudent() {
           <input
             type="text"
             name="email"
-            value={formData.email}
+            value={formData.email!=null?formData.email:""}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
           />
@@ -116,7 +121,7 @@ export default function UpdateStudent() {
           <input
             type="text"
             name="phone"
-            value={formData.phone}
+            value={formData.phone!=null?formData.phone:""}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
           />
